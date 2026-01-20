@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tic-Tac-Toe-Vue</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+</head>
+
+<body>
+    <div id="app">
+
+        <div class="flex items-center justify-center h-screen bg-black/20">
+            <div>
+
+                <div class="grid grid-cols-3 bg-blue-500 p-10 rounded-xl">
+                    <div v-for="(row, rowIndex) in boardCells" :key="rowIndex">
+                        <div v-for="(cell, colIndex) in row" :key="colIndex" @click="cellClicked(rowIndex, colIndex)"
+                            class="flex items-center
+                        justify-center m-2 w-24 h-24 bg-gray-200 rounded-xl shadow-lg text-4xl
+                        font-bold cursor-pointer" :class="{
+                            'text-red-600': cell==='X',
+                            'text-blue-600': cell==='O'
+                        }">
+                            {{cell}}
+                        </div>
+                    </div>
+                </div>
+
+                <h1 class="text-center text-3xl font-bold">{{message}}</h1>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        Vue.createApp({
+            data() {
+                return {
+                    // global
+                    boardCells: [
+                        ["", "", ""],
+                        ["", "", ""],
+                        ["", "", ""]
+                    ],
+                    currentPlayer: "X",
+                    message: "Lets Play!"
+
+                }
+            },
+
+            methods: {
+
+                cellClicked(row, col) {
+                    if (this.boardCells[row][col] === "") {
+                        this.boardCells[row][col] = this.currentPlayer;
+                        if (this.isWinner(this.currentPlayer)) {
+                            this.message = `Congrats ${this.currentPlayer} wins!`;
+                            setTimeout(() => {
+                                this.resetTheGame();
+                            }, 1500);
+                        } else {
+                            if (this.currentPlayer === 'X') {
+                                this.currentPlayer = 'O';
+                                this.message = `Player ${this.currentPlayer} turns`
+                            } else {
+                                this.currentPlayer = 'X';
+                                this.message = `Player ${this.currentPlayer} turns`
+                            }
+                        }
+                    }
+                },
+
+                isWinner(user) {
+                    // para row
+                    for (let row = 0; row < this.boardCells.length; row++) {
+                        if (this.boardCells[row][0] == user
+                            && this.boardCells[row][1] == user
+                            && this.boardCells[row][2] == user) {
+                            return true;
+                        }
+                    }
+                    // para columns
+                    for (let col = 0; col < 3; col++) {
+                        if (this.boardCells[0][col] == user
+                            && this.boardCells[1][col] == user
+                            && this.boardCells[2][col] == user) {
+                            return true;
+                        }
+                    }
+                    // para diagonals
+                    if (this.boardCells[0][0] == user
+                        && this.boardCells[1][1] == user
+                        && this.boardCells[2][2] == user) {
+                        return true;
+                    }
+                    if (this.boardCells[0][2] == user
+                        && this.boardCells[1][1] == user
+                        && this.boardCells[2][0] == user) {
+                        return true;
+                    }
+                    return false;
+                },
+                resetTheGame() {
+                    this.boardCells = [
+                        ["", "", ""],
+                        ["", "", ""],
+                        ["", "", ""]
+                    ];
+                    this.message = "Let's Play!";
+                }
+            }
+
+
+        }).mount('#app')
+    </script>
+   
+
+
+    </script>
+
+    <body>
+
+</html>
